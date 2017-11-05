@@ -97,4 +97,4 @@ Visualisations of feature distributions and their relations are key to understan
 ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10()
 ```
 
-![](fig/unnamed-chunk-6-1.png)<!-- -->
+![](fig/Distribution of LogTrip_duration.html)<!-- -->
