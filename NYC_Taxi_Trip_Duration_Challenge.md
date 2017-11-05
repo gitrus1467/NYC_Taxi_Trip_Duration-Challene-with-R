@@ -33,7 +33,7 @@ library('caret') # modelling
 library('plotly') #visualization
 library ('gridExtra') # arrange plots
 ```
-Load data
+**Load data**
 
 
 ```r
@@ -71,7 +71,7 @@ summary(train)
 ##  Max.   :43.92                       Max.   :3526282
 ```
 
-Reformating Data
+**Reformating Data**
 
 
 ```r
