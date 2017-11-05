@@ -96,5 +96,4 @@ Visualisations of feature distributions and their relations are key to understan
 ```r
 ggplotly(ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10())
 ```
-
-!<iframe width=\"100%\" height=\"450\" src=\"figure/Duration_dist.html\"></iframe>
+![](figure/Duration_dist.html?raw=true)
