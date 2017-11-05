@@ -33,7 +33,7 @@ library('caret') # modelling
 library('plotly') #visualization
 library ('gridExtra') # arrange plots
 ```
-**Load data**
+Load data
 
 
 ```r
@@ -71,7 +71,7 @@ summary(train)
 ##  Max.   :43.92                       Max.   :3526282
 ```
 
-**Reformating Data**
+Reformating Data
 
 
 ```r
@@ -94,6 +94,7 @@ Visualisations of feature distributions and their relations are key to understan
 
 
 ```r
-ggplotly(ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10())
+ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10()
 ```
-![](figure/Duration_dist.html?raw=true)
+
+![](fig/unnamed-chunk-6-1.png)<!-- -->
