@@ -2,7 +2,7 @@
 title: "NYC_Taxi_Trip_Duration_Challenge"
 author: "Assadullah_Samir"
 date: "5 November 2017"
-output: 
+output:
     html_document:
     #  keep_md: yes
       code_folding: hide
@@ -13,8 +13,8 @@ output:
       number_sections: yes
       theme: cosmo
       toc: yes
-    
-  
+
+
 ---
 
 
@@ -131,7 +131,7 @@ summary(train)
 ##                                3rd Qu.:2016-05-15 03:56:08  
 ##                                Max.   :2016-06-30 23:59:39  
 ##                                                             
-##  dropoff_datetime              passenger_count   pickup_longitude 
+##  dropoff_datetime              passenger_count   pickup_longitude
 ##  Min.   :2016-01-01 00:03:31   1      :1033540   Min.   :-121.93  
 ##  1st Qu.:2016-02-17 17:05:32   2      : 210318   1st Qu.: -73.99  
 ##  Median :2016-04-01 17:35:12   5      :  78088   Median : -73.98  
@@ -154,14 +154,14 @@ summary(train)
 ##  Mean   :    959   Mean   :13.61   Apr:251645  
 ##  3rd Qu.:   1075   3rd Qu.:19.00   May:248487  
 ##  Max.   :3526282   Max.   :23.00   Jun:234316  
-## 
+##
 ```
 
 # Individual feature visualisations
 
 Visualisations of feature distributions and their relations are key to understanding a data set, and they often open up new lines of inquiry. I always recommend to examine the data from as many different perspectives as possible to notice even subtle trends and correlations.
 
-We start with a map of NYC and overlay a managable number of pickup coordinates to get a general overview of the locations and distances in question. 
+We start with a map of NYC and overlay a managable number of pickup coordinates to get a general overview of the locations and distances in question.
 
 
 ```r
@@ -193,13 +193,13 @@ Over the year, the distributions of *pickup\_datetime* and *dropoff\_datetime* l
 ggplot(train,aes(pickup_datetime)) +geom_histogram(fill = "red", bins = 120) +  labs(x = "Pickup dates")
 ```
 
-<img src="fig/unnamed-chunk-8-1.png" width="100%" height="3" />
+![](fig/unnamed-chunk-8-1.png)<!-- -->
 
 ```r
 ggplot(train, aes(dropoff_datetime)) +geom_histogram(fill = "blue", bins = 120) +  labs(x = "Dropoff dates")
 ```
 
-<img src="fig/unnamed-chunk-9-1.png" width="100%" height="3" />
+![](fig/unnamed-chunk-9-1.png)<!-- -->
 ## Binning of trip_duration
 Duartion of the trips range from 1 sec to over 30 days but most of the journeys are under 1 hour. So binning the duration in 5 minute intervals, upto 1 hour, as trip_length-
 
@@ -207,12 +207,12 @@ Duartion of the trips range from 1 sec to over 30 days but most of the journeys 
 ## Function for trip_duration categorization
 duration.cat <- function(x, lower = 0, upper, by = 300,
                     sep = "-", above.char = "+") {
-  
+
   labs <- c(paste(seq(lower, upper - by, by = by),
                   seq(lower + by - 1, upper - 1, by = by),
                   sep = sep),
             paste(upper, above.char, sep = ""))
-  
+
   cut(floor(x), breaks = c(seq(lower, upper, by = by), Inf),
       right = FALSE, labels = labs)
 }
