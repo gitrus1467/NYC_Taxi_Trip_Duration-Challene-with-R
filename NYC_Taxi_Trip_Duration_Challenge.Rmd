@@ -4,15 +4,23 @@ author: "Assadullah_Samir"
 date: "5 November 2017"
 output: 
     html_document:
-    code_folding: hide
-    fig_caption: yes
-    fig_height: 4.5
-    highlight: tango
-    keep_md: yes
-    number_sections: yes
-    theme: cosmo
-    toc: yes
+    #  keep_md: yes
+      code_folding: hide
+      fig_caption: yes
+      fig_height: 4.5
+      highlight: tango
+      keep_md: yes
+      number_sections: yes
+      theme: cosmo
+      toc: yes
+    
+  
 ---
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  fig.path = "fig/"
+)
+```
 
 # Introduction
 This is a comprehensive Exploratory Data Analysis for the New York City Taxi Trip Duration competition with tidy R and ggplot2.
@@ -53,9 +61,10 @@ File structure and content
 
 ```{r}
 summary(train)
+glimpse(train)
 ```
 
-Reformating Data
+Reformating Data to create hour and month of the trips
 
 ```{r}
 train <- train %>%
@@ -67,14 +76,66 @@ train <- train %>%
 train<-train %>%
   mutate(hpick = hour(pickup_datetime),
          Month = factor(month(pickup_datetime, label = TRUE)))
+summary(train)
 ```
 
 # Individual feature visualisations
 
 Visualisations of feature distributions and their relations are key to understanding a data set, and they often open up new lines of inquiry. I always recommend to examine the data from as many different perspectives as possible to notice even subtle trends and correlations.
 
-## Log distribution of the trip_duartions
+We start with a map of NYC and overlay a managable number of pickup coordinates to get a general overview of the locations and distances in question. For this visualisation we use the [leaflet](https://rstudio.github.io/leaflet/) package, which includes a variety of cool tools for interactive maps. In this map you can zoom and pan through the pickup locations:
+
+```{r fig.align = 'default', warning = FALSE, fig.cap ="Fig. 1", out.width="100%"}
+set.seed(1234)
+foo <- sample_n(train, 8e3)
+
+leaflet(data = foo) %>% addProviderTiles("Esri.NatGeoWorldMap") %>%
+  addCircleMarkers(~ pickup_longitude, ~pickup_latitude, radius = 1,
+                   color = "blue", fillOpacity = 0.3)
+```
+In turns out that almost all of our trips were in fact taking place in Manhattan only. Another notable hot-spot is JFK airport towards the south-east of the city.
+
+The map gives us an idea what some of the our distributions could look like. Let's start with plotting the target feature *trip\_duration*:
+
+## Distribution of log of the trip_duartions
 
 ```{r, fig.width=8}
-ggplotly(ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10())
+ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale_x_log10()
+```
+
+Over the year, the distributions of *pickup\_datetime* and *dropoff\_datetime* look like this:
+
+```{r fig.align = 'default', warning = FALSE, fig.cap ="Fig. 3", out.width="100%",out.height=3}
+train %>%
+  ggplot(aes(pickup_datetime)) +
+  geom_histogram(fill = "red", bins = 120) +
+  labs(x = "Pickup dates")
+
+train %>%
+  ggplot(aes(dropoff_datetime)) +
+  geom_histogram(fill = "blue", bins = 120) +
+  labs(x = "Dropoff dates")
+```
+## Binning of trip_duration
+Duartion of the trips range from 1 sec to over 30 days but most of the journeys are under 1 hour. So binning the duration in 5 minute intervals, upto 1 hour, as trip_length-
+```{r}
+## Function for trip_duration categorization
+duration.cat <- function(x, lower = 0, upper, by = 300,
+                    sep = "-", above.char = "+") {
+  
+  labs <- c(paste(seq(lower, upper - by, by = by),
+                  seq(lower + by - 1, upper - 1, by = by),
+                  sep = sep),
+            paste(upper, above.char, sep = ""))
+  
+  cut(floor(x), breaks = c(seq(lower, upper, by = by), Inf),
+      right = FALSE, labels = labs)
+}
+## Binning using the function
+train<-train %>%
+  mutate(trip_length = duration.cat(trip_duration,upper=3600))
+```
+Distribution of trip_length
+```{r, fig.width=9}
+ggplot(train,aes(trip_length,fill=factor(vendor_id)))+geom_bar()+theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
