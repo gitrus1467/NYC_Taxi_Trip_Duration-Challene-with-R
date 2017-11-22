@@ -195,28 +195,20 @@ Over the year, the distributions of *pickup\_datetime* and *dropoff\_datetime* l
 
 
 ```r
-train %>%
-  ggplot(aes(pickup_datetime)) +
+ggplot(train,aes(pickup_datetime)) +
   geom_histogram(fill = "red", bins = 120) +
   labs(x = "Pickup dates")
 ```
+![](./fig/unnamed-chunk-8-1.png)<!-- -->
 
-<div class="figure">
-<img src="fig/unnamed-chunk-8-1.png" alt="Fig. 3" width="100%" height="3" />
-<p class="caption">Fig. 3</p>
-</div>
 
 ```r
-train %>%
-  ggplot(aes(dropoff_datetime)) +
+ggplot(train, aes(dropoff_datetime)) +
   geom_histogram(fill = "blue", bins = 120) +
   labs(x = "Dropoff dates")
 ```
+![](./fig/unnamed-chunk-8-2.png)<!-- -->
 
-<div class="figure">
-<img src="fig/unnamed-chunk-8-2.png" alt="Fig. 3" width="100%" height="3" />
-<p class="caption">Fig. 3</p>
-</div>
 ## Binning of trip_duration
 Duartion of the trips range from 1 sec to over 30 days but most of the journeys are under 1 hour. So binning the duration in 5 minute intervals, upto 1 hour, as trip_length-
 

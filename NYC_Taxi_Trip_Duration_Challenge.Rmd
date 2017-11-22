@@ -105,14 +105,12 @@ ggplot(train,aes(trip_duration,fill=vendor_id))+geom_histogram(bins = 100)+scale
 
 Over the year, the distributions of *pickup\_datetime* and *dropoff\_datetime* look like this:
 
-```{r fig.align = 'default', warning = FALSE, fig.cap ="Fig. 3", out.width="100%",out.height=3}
-train %>%
-  ggplot(aes(pickup_datetime)) +
+```{r fig.align = 'default', warning = FALSE, out.width="100%",out.height=3}
+ggplot(train,aes(pickup_datetime)) +
   geom_histogram(fill = "red", bins = 120) +
   labs(x = "Pickup dates")
 
-train %>%
-  ggplot(aes(dropoff_datetime)) +
+ggplot(train, aes(dropoff_datetime)) +
   geom_histogram(fill = "blue", bins = 120) +
   labs(x = "Dropoff dates")
 ```
