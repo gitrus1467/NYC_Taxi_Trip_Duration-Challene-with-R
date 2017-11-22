@@ -44,7 +44,7 @@ library('forcats') # factor manipulation
 library('lubridate') # date and time
 library('geosphere') # geospatial locations
 library('leaflet') # maps
-library('leaflet.extras') # maps
+library('ggmap') # maps
 library('maps') # maps
 library('xgboost') # modelling
 library('caret') # modelling
@@ -83,15 +83,15 @@ summary(train)
 
 Visualisations of feature distributions and their relations are key to understanding a data set, and they often open up new lines of inquiry. I always recommend to examine the data from as many different perspectives as possible to notice even subtle trends and correlations.
 
-We start with a map of NYC and overlay a managable number of pickup coordinates to get a general overview of the locations and distances in question. For this visualisation we use the [leaflet](https://rstudio.github.io/leaflet/) package, which includes a variety of cool tools for interactive maps. In this map you can zoom and pan through the pickup locations:
+We start with a map of NYC and overlay a managable number of pickup coordinates to get a general overview of the locations and distances in question. 
 
-```{r fig.align = 'default', warning = FALSE, fig.cap ="Fig. 1", out.width="100%"}
-set.seed(1234)
-foo <- sample_n(train, 8e3)
+```{r,warning=FALSE, results=FALSE,message=FALSE,fig.width=9}
+set.seed(25)
+foo <- train[sample(nrow(train), 80000), ]
+nyc_map <- get_map(location = "new york", zoom = 10,maptype = "toner-2010",source = "stamen")
+ggmap(nyc_map, extent = "device") +
+  geom_point(aes(x = pickup_longitude, y = pickup_latitude,color="red"), data = foo, alpha = .5)
 
-leaflet(data = foo) %>% addProviderTiles("Esri.NatGeoWorldMap") %>%
-  addCircleMarkers(~ pickup_longitude, ~pickup_latitude, radius = 1,
-                   color = "blue", fillOpacity = 0.3)
 ```
 In turns out that almost all of our trips were in fact taking place in Manhattan only. Another notable hot-spot is JFK airport towards the south-east of the city.
 
